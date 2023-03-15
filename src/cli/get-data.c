@@ -19,17 +19,20 @@ show_token (DatabaseData *db_data,
             const gchar  *account,
             const gchar  *issuer,
             gboolean      match_exactly,
-            gboolean      show_next_token)
+            gboolean      show_next_token,
+            gboolean      verbose)
 {
     gsize index;
     json_t *obj;
     gboolean found = FALSE;
+    if(verbose) g_printerr("checking for %s::%s\n", issuer, account);
     json_array_foreach (db_data->json_data, index, obj) {
         const gchar *account_from_db = json_string_value (json_object_get (obj, "label"));
         const gchar *issuer_from_db = NULL;
         if (issuer != NULL) {
             issuer_from_db = json_string_value (json_object_get (obj, "issuer"));
         }
+        if(verbose) g_printerr("  db entry %s::%s\n", issuer_from_db, account_from_db);
         if (account_from_db != NULL && issuer_from_db != NULL && account != NULL) {
             // both account and issuer are present
             if (compare_strings (account_from_db, account, match_exactly) == 0 && compare_strings (issuer_from_db, issuer, match_exactly) == 0) {
@@ -110,6 +113,7 @@ get_token (json_t       *obj,
 {
     cotp_error_t cotp_err;
     const gchar *issuer = json_string_value (json_object_get (obj, "issuer"));
+    const gchar *account = json_string_value (json_object_get (obj, "label"));
     const gchar *secret = json_string_value (json_object_get (obj, "secret"));
     g_print (_("%s::%s\n"), issuer, account);
     gint digits = (gint)json_integer_value (json_object_get (obj, "digits"));

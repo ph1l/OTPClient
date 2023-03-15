@@ -92,7 +92,7 @@ main (gint    argc,
     }
 
     gchar *account = NULL, *issuer = NULL;
-    gboolean show_next_token = FALSE, match_exactly = FALSE;
+    gboolean show_next_token = FALSE, match_exactly = FALSE, verbose = FALSE;
 
     if (g_strcmp0 (argv[1], "show") == 0) {
         if (argc < 4 || argc > 8) {
@@ -110,6 +110,8 @@ main (gint    argc,
                 match_exactly = TRUE;
             } else if (g_strcmp0 (argv[i], "-n") == 0) {
                 show_next_token = TRUE;
+            } else if (g_strcmp0 (argv[i], "-v") == 0) {
+                verbose = TRUE;
             }
         }
         if (account == NULL) {
@@ -117,7 +119,7 @@ main (gint    argc,
             g_printerr ("%s\n", _("[ERROR]: The account option (-a) must be specified and can not be empty."));
             goto end;
         }
-        show_token (db_data, account, issuer, match_exactly, show_next_token);
+        show_token (db_data, account, issuer, match_exactly, show_next_token, verbose);
     } else if (g_strcmp0 (argv[1], "list") == 0) {
         list_all_acc_iss (db_data);
     } else if (g_strcmp0 (argv[1], "export") == 0) {
