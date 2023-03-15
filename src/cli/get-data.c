@@ -33,25 +33,22 @@ show_token (DatabaseData *db_data,
         if (account_from_db != NULL && issuer_from_db != NULL && account != NULL) {
             // both account and issuer are present
             if (compare_strings (account_from_db, account, match_exactly) == 0 && compare_strings (issuer_from_db, issuer, match_exactly) == 0) {
-                get_token (obj, db_data, show_next_token);
                 found = TRUE;
             }
-        } else {
-            if (account_from_db != NULL && account != NULL) {
-                // account is present, but issuer is not
-                if (compare_strings (account_from_db, account, match_exactly) == 0) {
-                    get_token (obj, db_data, show_next_token);
-                    found = TRUE;
-                }
-            } else {
-                // account was null, but issue may be present
-                if (issuer_from_db != NULL) {
-                    if (compare_strings (issuer_from_db, issuer, match_exactly) == 0) {
-                        get_token (obj, db_data, show_next_token);
-                        found = TRUE;
-                    }
-                }
+        } else if (account_from_db != NULL && account != NULL) {
+            // account is present, but issuer is not
+            if (compare_strings (account_from_db, account, match_exactly) == 0) {
+                found = TRUE;
             }
+        } else if (issuer_from_db != NULL) {
+            // account was null, but issue may be present
+            if (compare_strings (issuer_from_db, issuer, match_exactly) == 0) {
+                found = TRUE;
+            }
+        }
+        if(found) {
+            get_token (obj, db_data, show_next_token);
+            break;
         }
     }
     if (!found) {
