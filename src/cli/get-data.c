@@ -114,6 +114,7 @@ get_token (json_t       *obj,
     cotp_error_t cotp_err;
     const gchar *issuer = json_string_value (json_object_get (obj, "issuer"));
     const gchar *secret = json_string_value (json_object_get (obj, "secret"));
+    g_print (_("%s::%s\n"), issuer, account);
     gint digits = (gint)json_integer_value (json_object_get (obj, "digits"));
     gint algo = get_algo_int_from_str (json_string_value (json_object_get (obj, "algo")));
     gint period;
