@@ -81,12 +81,9 @@ main (gint    argc,
     GError *err = NULL;
     load_db (db_data, &err);
     if (err != NULL) {
-        const gchar *tmp_msg = _("Error while loading the database:");
-        gchar *msg = g_strconcat (tmp_msg, " %s\n", err->message, NULL);
-        g_printerr ("%s\n", msg);
+        g_printerr ("Error while loading the database: %s\n%s\n", db_data->db_path, err->message);
         gcry_free (db_data->key);
         g_free (db_data);
-        g_free (msg);
         return -1;
     }
 
